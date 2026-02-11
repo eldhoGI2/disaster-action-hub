@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Disaster Action Hub</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 10px;
+    }
+
+    #map {
+      height: 90vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Disaster Action Hub 🌍</h1>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // Initialize map
+    const map = L.map('map').setView([13.0827, 80.2707], 12);
+
+    // Load map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Fetch locations from backend
+    fetch("http://localhost:5000/api/locations")
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(location => {
+          const marker = L.marker([location.latitude, location.longitude])
+            .addTo(map)
+            .bindPopup(`
+              <strong>${location.name}</strong><br>
+              Category: ${location.category}
+            `);
+        });
+      })
+      .catch(err => console.error(err));
+  </script>
+
+</body>
+</html>
