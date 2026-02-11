@@ -1,0 +1,15 @@
+CREATE TABLE locations (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    latitude DECIMAL(9,6) NOT NULL,
+    longitude DECIMAL(9,6) NOT NULL,
+    category VARCHAR(50), -- e.g., 'Shelter', 'Hospital'
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE inventory (
+    id SERIAL PRIMARY KEY,
+    location_id INTEGER REFERENCES locations(id),
+    item_name VARCHAR(100),
+    quantity INTEGER DEFAULT 0
+);
